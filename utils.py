@@ -2,6 +2,7 @@
 
 import time
 import pandas as pd
+import numpy as np
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -125,3 +126,19 @@ def coleta_fred(codigo, id):
     )
   return(df)
 
+# Função para transformar dados, conforme definido nos metadados
+def transformar(x, tipo):
+
+  switch = {
+      "1": lambda x: x,
+      "2": lambda x: x.diff(),
+      "3": lambda x: x.diff().diff(),
+      "4": lambda x: np.log(x),
+      "5": lambda x: np.log(x).diff(),
+      "6": lambda x: np.log(x).diff().diff()
+  }
+
+  if tipo not in switch:
+      raise ValueError("Tipo inválido")
+
+  return switch[tipo](x)
