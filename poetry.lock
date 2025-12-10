@@ -338,6 +338,25 @@ files = [
 tests = ["asttokens (>=2.1.0)", "coverage", "coverage-enable-subprocess", "ipython", "littleutils", "pytest", "rich ; python_version >= \"3.11\""]
 
 [[package]]
+name = "faicons"
+version = "0.2.2"
+description = "An interface to Font-Awesome for use in Shiny."
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "faicons-0.2.2-py3-none-any.whl", hash = "sha256:d45d7c2635b53582a3375c67d7e975a28a91d2c16ef5f6b5033b5cdd507224b6"},
+    {file = "faicons-0.2.2.tar.gz", hash = "sha256:6b7d7b19180179b6b83783f91bf6c9311c0f00ae0f97d41be1d24d9942361659"},
+]
+
+[package.dependencies]
+htmltools = ">=0.1.4.9002"
+
+[package.extras]
+dev = ["black (>=23.1.0)", "flake8 (==3.9.2) ; python_version <= \"3.7\"", "flake8 (>=6.0.0) ; python_version > \"3.7\"", "wheel"]
+test = ["pytest (>=6.2.4)"]
+
+[[package]]
 name = "fastparquet"
 version = "2024.11.0"
 description = "Python support for Parquet file format"
@@ -2317,4 +2336,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "ec897a9d3887850a7ab6e70e2d5361af948cc5406ad3f9ace67b210bb5abaf0c"
+content-hash = "18c628d15b2b199e00252255bd6778259a748f214c6cd3355dfbe1c1e92a42a8"

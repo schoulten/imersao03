@@ -19,9 +19,9 @@ app_ui = ui.page_navbar(
     ui.nav_panel(
         "Previsão",
         ui.layout_columns(
-            ui.card(ui.output_ui("card_yoy")),
-            ui.card(ui.output_ui("card_mom")),
-            ui.card(ui.output_ui("card_last"))
+            ui.output_ui("card_yoy"),
+            ui.output_ui("card_mom"),
+            ui.output_ui("card_last")
         ),
         ui.layout_columns(
             ui.card(output_widget("fanchart")),

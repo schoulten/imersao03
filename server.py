@@ -1,10 +1,12 @@
 # Bibliotecas ----
-from shiny import Inputs, Outputs, Session, render, reactive
+from shiny import Inputs, Outputs, Session, render, reactive, ui
 from shinywidgets import render_widget
 from globals import df_ipca
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+import numpy as np
+from faicons import icon_svg
 
 
 # Back end ----
@@ -43,6 +45,42 @@ def server(input: Inputs, output: Outputs, session: Session):
             .round(2)
         )
         return df_fantable
+
+    @reactive.calc
+    def acumular_previsao_mom_para_yoy():
+        df_acumulado = (
+            obter_dados_fanchart()
+            .assign(
+                valor_yoy = lambda x: ((((x.valor / 100) + 1).rolling(12).apply(lambda x: np.prod(x), raw = True) - 1)) * 100
+            )
+        )
+        return df_acumulado
+
+    @reactive.calc
+    def obter_previsao_ano_corrente():
+        modelo_selecionado = input.modelos()
+        yoy = acumular_previsao_mom_para_yoy().assign(data_referencia = lambda x: pd.to_datetime(x.data_referencia))
+        previsao = yoy.query("tipo == @modelo_selecionado")
+        ano_corrente = previsao.data_referencia.min().year
+        valor_previsao = previsao.query("data_referencia == data_referencia.min()").valor_yoy.round(2).iloc[0]
+        return (ano_corrente, valor_previsao)
+
+    @reactive.calc
+    def obter_previsao_mensal():
+        modelo_selecionado = input.modelos()
+        mom = obter_dados_fanchart().assign(data_referencia = lambda x: pd.to_datetime(x.data_referencia))
+        previsao = mom.query("tipo == @modelo_selecionado")
+        mes_corrente = previsao.data_referencia.min().strftime("%m/%Y")
+        valor_previsao = previsao.query("data_referencia == data_referencia.min()").valor.round(2).iloc[0]
+        return (mes_corrente, valor_previsao)
+    
+    @reactive.calc
+    def obter_ultimo_valor_mensal():
+        mom = obter_dados_fanchart().assign(data_referencia = lambda x: pd.to_datetime(x.data_referencia))
+        previsao = mom.query("tipo == 'IPCA'")
+        mes_corrente = previsao.data_referencia.max().strftime("%m/%Y")
+        valor_realizado = previsao.query("data_referencia == data_referencia.max()").valor.round(2).iloc[0]
+        return (mes_corrente, valor_realizado)
 
     @render_widget
     def fanchart():
@@ -87,3 +125,27 @@ def server(input: Inputs, output: Outputs, session: Session):
     @render.data_frame
     def fantable():
         return preparar_dados_fantable()
+    
+    @render.ui
+    def card_yoy():
+        return ui.value_box(
+            f"Previsão {obter_previsao_ano_corrente()[0]}",
+            f"{obter_previsao_ano_corrente()[1]}%",
+            showcase = icon_svg("calendar")
+        )
+    
+    @render.ui
+    def card_mom():
+        return ui.value_box(
+            f"Previsão {obter_previsao_mensal()[0]}",
+            f"{obter_previsao_mensal()[1]}%",
+            showcase = icon_svg("calendar")
+        )
+    
+    @render.ui
+    def card_last():
+        return ui.value_box(
+            f"Previsão {obter_ultimo_valor_mensal()[0]}",
+            f"{obter_ultimo_valor_mensal()[1]}%",
+            showcase = icon_svg("calendar")
+        )
