@@ -11,7 +11,7 @@ df_ipca = pd.concat([
         .filter(["ipca"])
         .dropna()
         .reset_index()
-        .rename(columns = {"ipca": "valor", "data": "data_referencia"})
+        .rename(columns = {"ipca": "valor", "data": "data_referencia", "index": "data_referencia"})
         .assign(variavel = "IPCA", tipo = "Observado")
     ),
     df_previsao

@@ -89,6 +89,7 @@ def server(input: Inputs, output: Outputs, session: Session):
         df_historico = pd.read_parquet("dados/df_mensal.parquet")
         df_tracking = (
             df_tracking
+            .assign(data_referencia = lambda x: pd.to_datetime(x.data_referencia))
             .set_index("data_referencia")
             .join(df_historico.filter(["ipca"]), how = "left")
             .reset_index()
