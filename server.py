@@ -175,7 +175,7 @@ def server(input: Inputs, output: Outputs, session: Session):
     @render.ui
     def card_last():
         return ui.value_box(
-            f"Previsão {obter_ultimo_valor_mensal()[0]}",
+            f"IPCA {obter_ultimo_valor_mensal()[0]}",
             f"{obter_ultimo_valor_mensal()[1]}%",
             showcase = icon_svg("magnifying-glass-chart")
         )
