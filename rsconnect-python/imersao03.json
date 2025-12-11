@@ -1,0 +1,12 @@
+{
+    "https://api.shinyapps.io": {
+        "server_url": "https://api.shinyapps.io",
+        "filename": "/home/runner/work/imersao03/imersao03",
+        "app_url": "https://8ddxho-fernando.shinyapps.io/previsa_ipca/",
+        "app_id": "16293156",
+        "app_guid": null,
+        "title": "previsa_ipca",
+        "app_mode": "python-shiny",
+        "app_store_version": 1
+    }
+}
